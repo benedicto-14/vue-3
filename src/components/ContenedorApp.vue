@@ -1,8 +1,8 @@
 <template>
     <div class="container">
 
-        <Directivas/>
-        <!-- <Formularios/> -->
+        <!-- <Directivas/> -->
+        <Formularios/>
 
     </div>
 </template>
