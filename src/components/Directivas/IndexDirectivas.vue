@@ -13,7 +13,7 @@
     <p :style="{ backgroundColor:bg, color:letter, padding:padd }">probando bind style</p>
 
     <h2>v-bind class</h2>
-    <p v-bind:class="{ 'success':hastError }">mensaje enviado correctamente</p>
+    <p v-bind:class="{ 'success' ? hastError }">mensaje enviado correctamente</p>
 
     <h2>v-for</h2>
     <h3>Ciudades</h3>
