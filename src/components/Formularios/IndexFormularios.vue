@@ -54,43 +54,60 @@
                                         <th scope="col">Matricula</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Apellido</th>
-                                        <th scope="col">Rol</th>
+                                        <th scope="col">Detalles</th>
+                                        <!-- <th scope="col">Rol</th>
                                         <th scope="col">Materias</th>
-                                        <th scope="col">Documentacion</th>
+                                        <th scope="col">Documentacion</th> -->
                                         </tr>
                                 </thead>
                                 <tbody>
                                         <tr v-if="personas.length === 0">
                                             <td colspan="6" :style="{textAlign:'center'}">sin registros</td>
                                         </tr>
-                                        <tr v-for="(person,i) in personas" :key="i">
-                                        <th scope="row">{{person.matricula}}</th>
-                                        <td>{{person.name}}</td>
-                                        <td>{{person.surname}}</td>
-                                        <td>{{person.rol}}</td>
-                                        <td><ul>
-                                                <li v-for="(m,i) in person.materias" :key="i">{{ m }}</li>
-                                        </ul></td>
-                                        <td><div :class="person.doc ? 'btn btn-success' : 'btn btn-warning'">{{  person.doc ? 'entregado' : 'falta' }}</div></td>
-                                        </tr>
+                                        <PersonDetail v-for="(person,i) in personas" :key="i" :persona="person" @mostrarPersona="abrirModal"/>
                                 </tbody>
                         </table>
                 </section>
+        </div>
+
+        <!-- Modal -->
+        <div ref="miModal" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header bg-info" style="color: white;">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Información</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <h4>Nombre : {{ personaDetail.name }}</h4>
+                                        <p>Apellido : {{ personaDetail.surname }}</p>
+                                        <p>Matricula : {{personaDetail.matricula}}</p>
+                                        <p>Rol : {{ personaDetail.rol }}</p>
+                                        <p>Materias:</p>
+                                        <ul>
+                                                <li v-for="(materia,i) in personaDetail.materias" :key="i">{{materia}}</li>
+                                        </ul>
+                                        <p>Documentacion: <button :class="personaDetail.doc ? 'btn btn-success' : 'btn btn-danger'">{{  personaDetail.doc ? 'entregado' : 'falta' }}</button></p>
+                                </div>
+                        </div>
+                </div>
         </div>
 </template>
 
 <script lang="ts" setup>
 
         import {Ref,ref} from 'vue';
+        import { IPersona } from '@/types';
+        import PersonDetail from './PersonDetail.vue';
 
-        interface IPersona{
-                name:string,
-                surname:string,
-                rol:string,
-                matricula:number,
-                materias:Array<string>,
-                doc:boolean
-        }
+        let personaDetail:Ref<IPersona> = ref({
+                name:'',
+                surname:'',
+                rol:'',
+                matricula:0,
+                materias:[],
+                doc:false
+        });
 
         let teacher:Ref<IPersona> = ref({
                 name:'',
@@ -101,9 +118,48 @@
                 doc:false
         });
 
-        let personas:Ref<Array<IPersona>> = ref([]);
-        
-        let materia:Ref<string> = ref('');
+        let personas:Ref<Array<IPersona>> = ref([
+                {
+                        name: "John",
+                        surname: "Doe",
+                        matricula: 12345,
+                        rol:'Alumno',
+                        materias: ['Español','Matematicas','Programacion','Artes','Ingles'],
+                        doc:true
+                },
+                {
+                        name: "Jane",
+                        surname: "Smith",
+                        matricula: 67890,
+                        rol:'Alumno',
+                        materias: ['Español','Matematicas','Ingles'],
+                        doc:false
+                },
+                {
+                        name: "Michael",
+                        surname: "Johnson",
+                        matricula: 24680,
+                        rol:'Profesor',
+                        materias: ['Programacion'],
+                        doc:true
+                },
+                {
+                        name: "Emily",
+                        surname: "Davis",
+                        matricula: 13579,
+                        rol:'Administrativo',
+                        materias: ['Sin materias'],
+                        doc:true
+                },
+                {
+                        name: "David",
+                        surname: "Brown",
+                        matricula: 97531,
+                        rol:'Alumno',
+                        materias: ['Matematicas','Programacion','Ingles'],
+                        doc:false
+                }
+        ]);
 
         const addTeacher = () => {
                 if (
@@ -134,6 +190,9 @@
                 return matricula === 5  ? true : false;
         }
 
+        const abrirModal = (person:IPersona) => {
+                personaDetail.value = person;
+        }
 </script>
 
 <style scoped>
