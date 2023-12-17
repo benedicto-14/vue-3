@@ -47,7 +47,9 @@
                         <button @click="addTeacher" class="btn btn-info" :style="{ color: 'white'}">Agregar</button>
                 </section>
                 <section :style="{width:'45%'}">
-                        <h2>Lista</h2>
+                        <div class="personas">
+                                <h2>Lista</h2> <h4>Total: {{ totalRegistros }}</h4>
+                        </div>
                         <table class="table">
                                 <thead>
                                         <tr>
@@ -55,9 +57,6 @@
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Apellido</th>
                                         <th scope="col">Detalles</th>
-                                        <!-- <th scope="col">Rol</th>
-                                        <th scope="col">Materias</th>
-                                        <th scope="col">Documentacion</th> -->
                                         </tr>
                                 </thead>
                                 <tbody>
@@ -96,7 +95,7 @@
 
 <script lang="ts" setup>
 
-        import {Ref,ref} from 'vue';
+        import {Ref,ref, computed} from 'vue';
         import { IPersona } from '@/types';
         import PersonDetail from './PersonDetail.vue';
 
@@ -193,6 +192,10 @@
         const abrirModal = (person:IPersona) => {
                 personaDetail.value = person;
         }
+
+        let totalRegistros = computed(()=>{
+                return personas.value.length;
+        });
 </script>
 
 <style scoped>
